@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Perpustakaan Mini</title>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --success: #27ae60; --danger: #e74c3c; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: var(--secondary); color: white; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #2980b9; }
+        .status { font-size: 0.8em; padding: 2px 6px; border-radius: 4px; color: white; }
+        .tersedia { background: var(--success); }
+        .dipinjam { background: var(--danger); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        .log { margin-top: 20px; grid-column: span 2; }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center; color: var(--primary);">📚 Library System v1.0</h1>
+
+<div class="container">
+    <div class="card">
+        <h2>Peminjaman Buku</h2>
+        <label>ID Anggota (1-3):</label>
+        <input type="number" id="memberId" placeholder="Contoh: 1">
+        
+        <label>Pilih Buku:</label>
+        <select id="bookSelect">
+            </select>
+        
+        <button onclick="prosesPinjam()">Proses Pinjam</button>
+        <p id="msg" style="font-weight: bold;"></p>
+    </div>
+
+    <div class="card">
+        <h2>Koleksi Buku</h2>
+        <table id="bookTable">
+            <thead>
+                <tr>
+                    <th>Judul</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="card log">
+        <h2>Log Transaksi Terkini</h2>
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>ID Pinjam</th>
+                    <th>Nama Anggota</th>
+                    <th>Judul Buku</th>
+                    <th>Tenggat Waktu</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // 1. DATA AWAL (Simulasi Database)
+    let books = [
+        { id: 101, judul: "Laskar Pelangi", status: "Tersedia" },
+        { id: 102, judul: "Bumi Manusia", status: "Tersedia" },
+        { id: 103, judul: "Filosofi Teras", status: "Tersedia" }
+    ];
+
+    let members = [
+        { id: 1, nama: "Andi", pinjamanAktif: 0 },
+        { id: 2, nama: "Budi", pinjamanAktif: 0 },
+        { id: 3, nama: "Citra", pinjamanAktif: 0 }
+    ];
+
+    let transactions = [];
+
+    // 2. FUNGSI UNTUK MERENDER TAMPILAN
+    function updateUI() {
+        // Update Tabel Buku
+        const bookBody = document.querySelector("#bookTable tbody");
+        const bookSelect = document.querySelector("#bookSelect");
+        bookBody.innerHTML = "";
+        bookSelect.innerHTML = "<option value=''>-- Pilih Buku --</option>";
+
+        books.forEach(b => {
+            const statusClass = b.status === "Tersedia" ? "tersedia" : "dipinjam";
+            bookBody.innerHTML += `<tr><td>${b.judul}</td><td><span class="status ${statusClass}">${b.status}</span></td></tr>`;
+            
+            if(b.status === "Tersedia") {
+                bookSelect.innerHTML += `<option value="${b.id}">${b.judul}</option>`;
+            }
+        });
+
+        // Update Tabel Log
+        const logBody = document.querySelector("#logTable tbody");
+        logBody.innerHTML = "";
+        transactions.forEach(t => {
+            logBody.innerHTML += `<tr><td>${t.idPinjam}</td><td>${t.namaAnggota}</td><td>${t.judulBuku}</td><td>${t.deadline}</td></tr>`;
+        });
+    }
+
+    // 3. LOGIKA ALGORITMA PEMINJAMAN
+    function prosesPinjam() {
+        const mId = parseInt(document.getElementById("memberId").value);
+        const bId = parseInt(document.getElementById("bookSelect").value);
+        const msg = document.getElementById("msg");
+
+        // Validasi Input
+        if(!mId || !bId) {
+            msg.style.color = "orange";
+            msg.innerText = "Mohon isi ID Anggota dan pilih buku!";
+            return;
+        }
+
+        // Cari Data
+        const member = members.find(m => m.id === mId);
+        const book = books.find(b => b.id === bId);
+
+        // ALGORITMA VALIDASI
+        if(!member) {
+            msg.style.color = "red";
+            msg.innerText = "Error: Anggota tidak terdaftar!";
+            return;
+        }
+
+        if(member.pinjamanAktif >= 3) {
+            msg.style.color = "red";
+            msg.innerText = "Error: Limit pinjaman Andi tercapai (Maks 3)!";
+            return;
+        }
+
+        // PROSES PEMINJAMAN
+        book.status = "Dipinjam";
+        member.pinjamanAktif += 1;
+
+        // Hitung Tenggat (7 hari dari sekarang)
+        const d = new Date();
+        d.setDate(d.getDate() + 7);
+        const deadline = d.toLocaleDateString('id-ID');
+
+        // Simpan Transaksi
+        const newTrans = {
+            idPinjam: "TRX" + Math.floor(Math.random() * 1000),
+            namaAnggota: member.nama,
+            judulBuku: book.judul,
+            deadline: deadline
+        };
+        transactions.push(newTrans);
+
+        // Output Berhasil
+        msg.style.color = "green";
+        msg.innerText = "Berhasil! Buku " + book.judul + " telah dipinjam.";
+        
+        updateUI();
+    }
+
+    // Jalankan render pertama kali
+    updateUI();
+</script>
+
+</body>
+</html>
