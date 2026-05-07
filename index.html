@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Manager - Sistem Terpadu</title>
+    <title>Smart Library - Sistem Peminjaman Terpadu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1e293b;
-            --accent: #3b82f6;
+            --primary: #2563eb;
+            --dark: #0f172a;
             --success: #10b981;
             --danger: #ef4444;
-            --warning: #f59e0b;
-            --light: #f8fafc;
+            --bg: #f8fafc;
         }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--light);
-            color: var(--primary);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
             margin: 0;
             padding: 20px;
         }
@@ -25,58 +25,61 @@
         .container { max-width: 1100px; margin: auto; }
 
         header {
-            text-align: center;
-            padding: 40px 0;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: white;
-            border-radius: 15px;
+            padding: 40px 20px;
+            border-radius: 20px;
+            text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
 
         .card {
             background: white;
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             border: 1px solid #e2e8f0;
         }
 
-        h2 { margin-top: 0; font-size: 1.25rem; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+        h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary); border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
 
-        label { display: block; margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
+        label { display: block; margin-top: 15px; font-weight: 600; font-size: 0.85rem; }
 
         input, select, button {
             width: 100%;
             padding: 12px;
             margin-top: 8px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
             font-size: 1rem;
+            box-sizing: border-box;
+            transition: 0.3s;
         }
 
+        input:focus, select:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+
         button {
-            background-color: var(--accent);
+            background-color: var(--primary);
             color: white;
             border: none;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
             margin-top: 20px;
         }
 
-        button:hover { filter: brightness(1.1); transform: translateY(-1px); }
-        button.secondary { background-color: var(--primary); }
+        button:hover { background-color: #1d4ed8; transform: translateY(-2px); }
+        .btn-return { background-color: var(--dark); }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        th { background: var(--light); text-align: left; padding: 12px; }
-        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; overflow: hidden; border-radius: 10px; }
+        th { background: #f1f5f9; text-align: left; padding: 15px; font-size: 0.85rem; }
+        td { padding: 15px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
 
-        .status-pill {
-            padding: 4px 10px;
-            border-radius: 20px;
+        .badge {
+            padding: 5px 12px;
+            border-radius: 8px;
             font-size: 0.75rem;
             font-weight: bold;
             color: white;
@@ -84,198 +87,189 @@
         .bg-available { background-color: var(--success); }
         .bg-borrowed { background-color: var(--danger); }
 
-        .log-container {
-            background: #1e293b;
-            color: #94a3b8;
+        .log-box {
+            background: #0f172a;
+            color: #38bdf8;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
             height: 200px;
             overflow-y: auto;
-            margin-top: 20px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 10px;
         }
-        .log-entry { margin-bottom: 5px; border-left: 2px solid var(--accent); padding-left: 10px; }
-        .log-time { color: var(--accent); margin-right: 10px; }
+
+        .alert-msg { padding: 10px; border-radius: 8px; margin-top: 10px; display: none; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Smart Library System</h1>
-        <p>Sistem Peminjaman & Pengembalian Buku Terpadu</p>
+        <h1>Smart Library Manager</h1>
+        <p>Sistem Peminjaman & Pengembalian Buku Otomatis</p>
     </header>
 
     <div class="grid">
         <div class="card">
-            <h2>Peminjaman Buku</h2>
-            <label>ID Anggota (1-3):</label>
-            <input type="number" id="memberId" placeholder="Input ID Siswa (Contoh: 1)">
+            <h2>Peminjaman (Check-out)</h2>
+            <label>Pilih Anggota:</label>
+            <select id="siswaInput">
+                <option value="">-- Pilih Nama Siswa --</option>
+                <option value="1">Rian (ID: 001)</option>
+                <option value="2">Budi (ID: 002)</option>
+                <option value="3">Citra (ID: 003) - Limit Penuh</option>
+            </select>
             
-            <label>Pilih Koleksi Buku:</label>
-            <select id="bookSelect"></select>
+            <label>Pilih Buku:</label>
+            <select id="bukuSelect"></select>
             
-            <button onclick="logicPinjam()">Proses Peminjaman</button>
+            <button onclick="prosesPinjam()">Pinjam Buku Sekarang</button>
         </div>
 
         <div class="card">
-            <h2>Pengembalian Buku</h2>
-            <label>Scan ID Buku:</label>
-            <input type="text" id="returnBookId" placeholder="Contoh: B001">
+            <h2>Pengembalian (Check-in)</h2>
+            <label>Masukkan ID Buku:</label>
+            <input type="text" id="kembaliBukuId" placeholder="Contoh: B-001">
             
-            <label>Status Keterlambatan:</label>
-            <select id="lateStatus">
-                <option value="0">Tepat Waktu (Denda Rp0)</option>
-                <option value="1">Terlambat 1 Hari (Denda Rp2.000)</option>
-                <option value="2">Terlambat 2 Hari (Denda Rp4.000)</option>
-                <option value="5">Terlambat 5 Hari (Denda Rp10.000)</option>
+            <label>Keterlambatan:</label>
+            <select id="lateDays">
+                <option value="0">Tepat Waktu (Rp 0)</option>
+                <option value="1">Terlambat 1 Hari (Rp 2.000)</option>
+                <option value="3">Terlambat 3 Hari (Rp 6.000)</option>
+                <option value="7">Terlambat 7 Hari (Rp 14.000)</option>
             </select>
             
-            <button class="secondary" onclick="logicKembali()">Proses Pengembalian</button>
+            <button class="btn-return" onclick="prosesKembali()">Proses Pengembalian</button>
         </div>
     </div>
 
-    <div class="card" style="margin-top: 20px;">
-        <h2>Koleksi Buku & Inventaris</h2>
-        <table id="inventoryTable">
-            <thead>
-                <tr>
-                    <th>ID Buku</th>
-                    <th>Judul Buku</th>
-                    <th>Status</th>
-                    <th>Peminjam</th>
-                    <th>Jatuh Tempo</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="card" style="margin-top:25px;">
+        <h2>Koleksi Buku & Status Real-time</h2>
+        <div style="overflow-x: auto;">
+            <table id="tabelBuku">
+                <thead>
+                    <tr>
+                        <th>KODE</th>
+                        <th>JUDUL BUKU</th>
+                        <th>STATUS</th>
+                        <th>PEMINJAM</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="card" style="margin-top: 20px;">
-        <h2>Log Aktivitas Sistem</h2>
-        <div id="activityLog" class="log-container">
-            <div class="log-entry">Sistem siap... Menunggu kedatangan siswa.</div>
-        </div>
+    <div class="card" style="margin-top:25px;">
+        <h2>System Activity Log (Algoritma)</h2>
+        <div id="systemLog" class="log-box">Sistem Berhasil Dimuat... Menunggu Transaksi.</div>
     </div>
 </div>
 
 <script>
-    // --- DATABASE SIMULASI ---
-    let books = [
-        { id: "B001", judul: "Fisika Modern", status: "Tersedia", peminjam: "-", due: "-" },
-        { id: "B002", judul: "Biologi Dasar", status: "Tersedia", peminjam: "-", due: "-" },
-        { id: "B003", judul: "Kimia Organik", status: "Tersedia", peminjam: "-", due: "-" },
-        { id: "B004", judul: "Matematika Diskrit", status: "Tersedia", peminjam: "-", due: "-" }
+    // Database Internal
+    let databaseBuku = [
+        { id: "B-001", judul: "Fisika Modern", status: "Tersedia", peminjam: "-" },
+        { id: "B-002", judul: "Algoritma Cerdas", status: "Tersedia", peminjam: "-" },
+        { id: "B-003", judul: "Sains Masa Depan", status: "Tersedia", peminjam: "-" },
+        { id: "B-004", judul: "Matematika Diskrit", status: "Tersedia", peminjam: "-" }
     ];
 
-    let members = [
-        { id: 1, nama: "Rian", limit: 3, pinjam: 0, denda: 0 },
-        { id: 2, nama: "Budi", limit: 3, pinjam: 0, denda: 0 },
-        { id: 3, nama: "Citra", limit: 3, pinjam: 3, denda: 0 } // Simulasi limit penuh
+    let databaseSiswa = [
+        { id: 1, nama: "Rian", pinjam: 0, limit: 3 },
+        { id: 2, nama: "Budi", pinjam: 0, limit: 3 },
+        { id: 3, nama: "Citra", pinjam: 3, limit: 3 } // Simulasi limit penuh
     ];
 
-    // --- FUNGSI UTAMA ---
-
-    function addLog(message) {
-        const log = document.getElementById("activityLog");
-        const time = new Date().toLocaleTimeString();
-        log.innerHTML = `<div class="log-entry"><span class="log-time">[${time}]</span> ${message}</div>` + log.innerHTML;
+    function updateLog(pesan) {
+        const logBox = document.getElementById("systemLog");
+        const waktu = new Date().toLocaleTimeString();
+        logBox.innerHTML = `[${waktu}] > ${pesan}<br>` + logBox.innerHTML;
     }
 
-    function render() {
-        const tbody = document.querySelector("#inventoryTable tbody");
-        const select = document.getElementById("bookSelect");
+    function renderTabel() {
+        const tbody = document.querySelector("#tabelBuku tbody");
+        const selectBuku = document.getElementById("bukuSelect");
         
         tbody.innerHTML = "";
-        select.innerHTML = '<option value="">-- Scan Barcode Buku --</option>';
+        selectBuku.innerHTML = '<option value="">-- Pilih Buku Tersedia --</option>';
 
-        books.forEach(b => {
-            const pillClass = b.status === "Tersedia" ? "bg-available" : "bg-borrowed";
-            tbody.innerHTML += `
-                <tr>
-                    <td><strong>${b.id}</strong></td>
-                    <td>${b.judul}</td>
-                    <td><span class="status-pill ${pillClass}">${b.status}</span></td>
-                    <td>${b.peminjam}</td>
-                    <td>${b.due}</td>
-                </tr>
-            `;
+        databaseBuku.forEach(buku => {
+            const statusClass = buku.status === "Tersedia" ? "bg-available" : "bg-borrowed";
+            tbody.innerHTML += `<tr>
+                <td><b>${buku.id}</b></td>
+                <td>${buku.judul}</td>
+                <td><span class="badge ${statusClass}">${buku.status}</span></td>
+                <td>${buku.peminjam}</td>
+            </tr>`;
 
-            if (b.status === "Tersedia") {
-                select.innerHTML += `<option value="${b.id}">${b.judul} (${b.id})</option>`;
+            if (buku.status === "Tersedia") {
+                selectBuku.innerHTML += `<option value="${buku.id}">${buku.judul}</option>`;
             }
         });
     }
 
-    // --- LOGIKA PEMINJAMAN ---
-    function logicPinjam() {
-        const mId = parseInt(document.getElementById("memberId").value);
-        const bId = document.getElementById("bookSelect").value;
+    function prosesPinjam() {
+        const sId = document.getElementById("siswaInput").value;
+        const bId = document.getElementById("bukuSelect").value;
         
-        const member = members.find(m => m.id === mId);
-        const book = books.find(b => b.id === bId);
+        const siswa = databaseSiswa.find(s => s.id == sId);
+        const buku = databaseBuku.find(b => b.id == bId);
 
-        // Tahap Validasi
-        if (!member) {
-            addLog("VALIDASI GAGAL: Siswa tidak ditemukan!");
-            return;
-        }
-        if (member.pinjam >= member.limit) {
-            addLog(`VALIDASI GAGAL: ${member.nama} sudah mencapai limit pinjam (Maks 3 buku).`);
-            return;
-        }
-        if (!book) {
-            addLog("VALIDASI GAGAL: Buku belum dipilih.");
+        if (!siswa) return alert("Pilih siswa terlebih dahulu!");
+        if (!buku) return alert("Pilih buku terlebih dahulu!");
+
+        // ALGORITMA VALIDASI
+        if (siswa.pinjam >= siswa.limit) {
+            updateLog(`ERROR: ${siswa.nama} gagal pinjam. Limit pinjaman (3) sudah penuh!`);
+            alert("Batas peminjaman tercapai!");
             return;
         }
 
-        // Tahap Eksekusi
-        const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + 7);
-        
-        book.status = "Dipinjam";
-        book.peminjam = member.nama;
-        book.due = dueDate.toLocaleDateString('id-ID');
-        member.pinjam++;
+        // PROSES
+        buku.status = "Dipinjam";
+        buku.peminjam = siswa.nama;
+        siswa.pinjam++;
 
-        addLog(`PEMINJAMAN BERHASIL: ${member.nama} meminjam "${book.judul}". Jatuh tempo: ${book.due}`);
-        render();
+        updateLog(`SUKSES: ${siswa.nama} berhasil meminjam buku "${buku.judul}".`);
+        renderTabel();
     }
 
-    // --- LOGIKA PENGEMBALIAN ---
-    function logicKembali() {
-        const bId = document.getElementById("returnBookId").value.toUpperCase();
-        const lateDays = parseInt(document.getElementById("lateStatus").value);
+    function prosesKembali() {
+        const bId = document.getElementById("kembaliBukuId").value.trim().toUpperCase();
+        const dendaPerHari = 2000;
+        const hariTelat = parseInt(document.getElementById("lateDays").value);
         
-        const book = books.find(b => b.id === bId);
+        const buku = databaseBuku.find(b => b.id.toUpperCase() == bId);
 
-        if (!book || book.status === "Tersedia") {
-            addLog("ERROR: Data tidak valid. Buku tidak terdaftar sebagai buku keluar.");
+        if (!buku || buku.status === "Tersedia") {
+            updateLog(`ERROR: Buku ${bId} tidak ditemukan dalam daftar pinjam.`);
+            alert("Buku tidak ditemukan!");
             return;
         }
 
-        const member = members.find(m => m.nama === book.peminjam);
+        const siswa = databaseSiswa.find(s => s.nama == buku.peminjam);
         
-        // Cek Denda
-        if (lateDays > 0) {
-            const dendaTotal = lateDays * 2000;
-            addLog(`KETERLAMBATAN: ${member.nama} terlambat ${lateDays} hari. Denda Rp${dendaTotal.toLocaleString()}.`);
+        // HITUNG DENDA
+        if (hariTelat > 0) {
+            const totalDenda = hariTelat * dendaPerHari;
+            updateLog(`DENDA: ${siswa.nama} membayar Rp ${totalDenda.toLocaleString()} (Telat ${hariTelat} hari).`);
         }
 
-        // Tahap Penyelesaian
-        member.pinjam--;
-        book.status = "Tersedia";
-        book.peminjam = "-";
-        book.due = "-";
+        // UPDATE STATUS
+        siswa.pinjam--;
+        buku.status = "Tersedia";
+        buku.peminjam = "-";
 
-        addLog(`PENGEMBALIAN BERHASIL: Buku "${book.judul}" kembali ke rak. Kuota ${member.nama} diperbarui.`);
-        document.getElementById("returnBookId").value = "";
-        render();
+        updateLog(`SUKSES: Buku "${buku.judul}" telah dikembalikan oleh ${siswa.nama}.`);
+        document.getElementById("kembaliBukuId").value = "";
+        renderTabel();
     }
 
-    // Jalankan render awal
-    render();
+    // Inisialisasi awal
+    renderTabel();
 </script>
 
 </body>
