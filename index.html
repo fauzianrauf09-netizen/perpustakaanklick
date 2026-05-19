@@ -205,14 +205,47 @@
     let databaseBuku = [
         { id: "B-001", judul: "Fisika Modern", status: "Tersedia", peminjam: "-" },
         { id: "B-002", judul: "Algoritma Cerdas", status: "Tersedia", peminjam: "-" },
-        { id: "B-003", judul: "Saits Masa Depan", status: "Tersedia", peminjam: "-" },
+        { id: "B-003", judul: "Sains Masa Depan", status: "Tersedia", peminjam: "-" },
         { id: "B-004", judul: "Matematika Diskrit", status: "Tersedia", peminjam: "-" }
     ];
 
+    // DATABASE SISWA SINKRON DENGAN ELEMEN SELECT HTML
     let databaseSiswa = [
-        { id: 1, nama: "Rian", pinjam: 0, limit: 3 },
-        { id: 2, nama: "Budi", pinjam: 0, limit: 3 },
-        { id: 3, nama: "Citra", pinjam: 3, limit: 3 } // Simulasi limit penuh
+        { id: 1, nama: "Abd Rizky Rafa Hiola", pinjam: 0, limit: 3 },
+        { id: 2, nama: "Ardiansyah Ismail", pinjam: 0, limit: 3 },
+        { id: 3, nama: "Cholid Azzam Suratinojo", pinjam: 0, limit: 3 },
+        { id: 4, nama: "Fadel Nur Rizki Wakid", pinjam: 0, limit: 3 },
+        { id: 5, nama: "Fahrul Lamusu", pinjam: 0, limit: 3 },
+        { id: 6, nama: "Fakhrianyansyah Eka Tabri", pinjam: 0, limit: 3 },
+        { id: 7, nama: "Fauzan Fatih Tolinggilo", pinjam: 0, limit: 3 },
+        { id: 8, nama: "Moh Farel Ali", pinjam: 0, limit: 3 },
+        { id: 9, nama: "Moh. Ilyansyah Kaharu", pinjam: 0, limit: 3 },
+        { id: 10, nama: "Muh. Adi Firdaus", pinjam: 0, limit: 3 },
+        { id: 11, nama: "Muhammad Ridho Lasaleng", pinjam: 0, limit: 3 },
+        { id: 12, nama: "Moh.Rayhan Panggi", pinjam: 0, limit: 3 },
+        { id: 13, nama: "Shawan Shobri Ilmawan Maunty", pinjam: 0, limit: 3 },
+        { id: 14, nama: "Navila Cahyani I. Masi", pinjam: 0, limit: 3 },
+        { id: 15, nama: "Indah Cahyaning Wulan", pinjam: 0, limit: 3 },
+        { id: 16, nama: "Chelsea Ishak", pinjam: 0, limit: 3 },
+        { id: 17, nama: "Nazwa Kirana Tanango", pinjam: 0, limit: 3 },
+        { id: 18, nama: "Aira Mohi", pinjam: 0, limit: 3 },
+        { id: 19, nama: "Siti Aura Rivai", pinjam: 0, limit: 3 },
+        { id: 20, nama: "Amalia H. Razak", pinjam: 0, limit: 3 },
+        { id: 21, nama: "Almira Juniara Tilahunga", pinjam: 0, limit: 3 },
+        { id: 22, nama: "Artika Y. Latiman", pinjam: 0, limit: 3 },
+        { id: 23, nama: "Djeny Mulyani N. Hasan", pinjam: 0, limit: 3 },
+        { id: 24, nama: "Mutmainah Dali", pinjam: 0, limit: 3 },
+        { id: 25, nama: "Nurain Nggadu", pinjam: 0, limit: 3 },
+        { id: 26, nama: "Sarah Zetira Alaydrus", pinjam: 0, limit: 3 },
+        { id: 27, nama: "Fatrianingsih Putri Yasin", pinjam: 0, limit: 3 },
+        { id: 28, nama: "Balqis Aurelia Susanto", pinjam: 0, limit: 3 },
+        { id: 29, nama: "Fauzia Nurazizah Rauf", pinjam: 0, limit: 3 },
+        { id: 30, nama: "Siti Khumaira Umar", pinjam: 0, limit: 3 },
+        { id: 31, nama: "Khanaya Gufrona Kai", pinjam: 0, limit: 3 },
+        { id: 32, nama: "Annisa Salsabila Badu", pinjam: 0, limit: 3 },
+        { id: 33, nama: "Putri Aini Nento", pinjam: 0, limit: 3 },
+        { id: 34, nama: "Nabila Putri Amara", pinjam: 0, limit: 3 },
+        { id: 35, nama: "Jessyca Virgina Putri Djamalu", pinjam: 0, limit: 3 }
     ];
 
     function updateLog(pesan) {
@@ -291,11 +324,11 @@
         }
 
         // UPDATE STATUS
-        siswa.pinjam--;
+        if (siswa) siswa.pinjam--;
         buku.status = "Tersedia";
         buku.peminjam = "-";
 
-        updateLog(`SUKSES: Buku "${buku.judul}" telah dikembalikan oleh ${siswa.nama}.`);
+        updateLog(`SUKSES: Buku "${buku.judul}" telah dikembalikan.`);
         document.getElementById("kembaliBukuId").value = "";
         renderTabel();
     }
