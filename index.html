@@ -201,15 +201,24 @@
 </div>
 
 <script>
-    // Database Internal
+    // DATABASE BUKU YANG SUDAH DIPERBARUI (13 MATA PELAJARAN)
     let databaseBuku = [
-        { id: "B-001", judul: "Fisika Modern", status: "Tersedia", peminjam: "-" },
-        { id: "B-002", judul: "Algoritma Cerdas", status: "Tersedia", peminjam: "-" },
-        { id: "B-003", judul: "Sains Masa Depan", status: "Tersedia", peminjam: "-" },
-        { id: "B-004", judul: "Matematika Diskrit", status: "Tersedia", peminjam: "-" }
+        { id: "B-001", judul: "Fisika", status: "Tersedia", peminjam: "-" },
+        { id: "B-002", judul: "Biologi", status: "Tersedia", peminjam: "-" },
+        { id: "B-003", judul: "Kimia", status: "Tersedia", peminjam: "-" },
+        { id: "B-004", judul: "Bahasa Indonesia", status: "Tersedia", peminjam: "-" },
+        { id: "B-005", judul: "Informatika", status: "Tersedia", peminjam: "-" },
+        { id: "B-006", judul: "Matematika", status: "Tersedia", peminjam: "-" },
+        { id: "B-007", judul: "Seni Budaya", status: "Tersedia", peminjam: "-" },
+        { id: "B-008", judul: "Pjok", status: "Tersedia", peminjam: "-" },
+        { id: "B-009", judul: "Bahasa Inggris", status: "Tersedia", peminjam: "-" },
+        { id: "B-010", judul: "Sejarah", status: "Tersedia", peminjam: "-" },
+        { id: "B-011", judul: "Sosiologi", status: "Tersedia", peminjam: "-" },
+        { id: "B-012", judul: "Ekonomi", status: "Tersedia", peminjam: "-" },
+        { id: "B-013", judul: "Agama", status: "Tersedia", peminjam: "-" }
     ];
 
-    // DATABASE SISWA SINKRON DENGAN ELEMEN SELECT HTML
+    // Database Internal Siswa
     let databaseSiswa = [
         { id: 1, nama: "Abd Rizky Rafa Hiola", pinjam: 0, limit: 3 },
         { id: 2, nama: "Ardiansyah Ismail", pinjam: 0, limit: 3 },
@@ -271,7 +280,7 @@
             </tr>`;
 
             if (buku.status === "Tersedia") {
-                selectBuku.innerHTML += `<option value="${buku.id}">${buku.judul}</option>`;
+                selectBuku.innerHTML += `<option value="${buku.id}">${buku.judul} (${buku.id})</option>`;
             }
         });
     }
@@ -311,7 +320,7 @@
 
         if (!buku || buku.status === "Tersedia") {
             updateLog(`ERROR: Buku ${bId} tidak ditemukan dalam daftar pinjam.`);
-            alert("Buku tidak ditemukan!");
+            alert("Buku tidak ditemukan atau sudah dikembalikan!");
             return;
         }
 
@@ -320,7 +329,7 @@
         // HITUNG DENDA
         if (hariTelat > 0) {
             const totalDenda = hariTelat * dendaPerHari;
-            updateLog(`DENDA: ${siswa.nama} membayar Rp ${totalDenda.toLocaleString()} (Telat ${hariTelat} hari).`);
+            updateLog(`DENDA: ${siswa.nama || 'Siswa'} membayar Rp ${totalDenda.toLocaleString()} (Telat ${hariTelat} hari).`);
         }
 
         // UPDATE STATUS
